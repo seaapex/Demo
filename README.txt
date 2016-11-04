@@ -1,6 +1,6 @@
 This is a demo project to show a simplest fully functional rest application
 
-The primary application server is wildfly-10.0.0.Final. Standalone domain can be found in standalone folder.
+The primary application server is wildfly-10.0.0.Final. Standalone domain can be found in standalone folder. (Don't include this folder when building the project)
 Username: admin Password: admin
 
 This project is built upon a maven archetype of the following:
