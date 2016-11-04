@@ -1,0 +1,8 @@
+
+\mysql-5.7.13-winx64\bin\mysqld.exe --console
+
+
+The followings are the database settings in the datasource setting in this application server domain
+jdbc:mysql://localhost:3306/demo
+root
+password
