@@ -1,5 +1,7 @@
 This is a demo project to show a simplest fully functional rest application
 
+The primary application server is wildfly-10.0.0.Final. Standalone domain can be found in standalone folder.
+
 This project is built upon a maven archetype of the following:
 Group Id: org.wildfly.archetype
 Artifact Id: wildfly-javaee7-webapp-ear-blank-archetype
