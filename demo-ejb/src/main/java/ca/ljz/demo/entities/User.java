@@ -24,7 +24,7 @@ import java.util.List;
 		@NamedQuery(name = User.QUERY_NAME, query = "SELECT u FROM User u WHERE u.name = :name") })
 @XmlRootElement
 @XmlType(propOrder = { "uuid", "name", "password", "creatTime", "editTime", "groups" })
-public class User extends Base {
+public class User extends Base implements IUser<User, Group> {
 
 	/**
 	 * 
@@ -63,17 +63,20 @@ public class User extends Base {
 	public User() {
 	}
 
+	@Override
 	public String getName() {
 		logger.info("getName");
 		return this.name;
 	}
 
+	@Override
 	public void setName(String name) {
 		logger.info("setName");
 		this.name = name;
 	}
 
 	@XmlTransient
+	@Override
 	public String getPassword() {
 		logger.info("getPassword");
 		return this.password;
@@ -81,16 +84,19 @@ public class User extends Base {
 
 	@XmlElement
 	@XmlJavaTypeAdapter(PasswordAdapter.class)
+	@Override
 	public void setPassword(String password) {
 		logger.info("setPassword");
 		this.password = password;
 	}
 
+	@Override
 	public List<Group> getGroups() {
 		logger.info("getGroups");
 		return this.groups;
 	}
 
+	@Override
 	public void setGroups(List<Group> groups) {
 		logger.info("setGroups");
 		this.groups = groups;

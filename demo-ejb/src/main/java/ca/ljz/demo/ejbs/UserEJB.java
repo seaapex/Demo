@@ -4,13 +4,14 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import ca.ljz.demo.entities.Group;
 import ca.ljz.demo.entities.User;
 
 /**
  * Session Bean implementation class UserEJB
  */
 @Stateless
-public class UserEJB extends BaseEJB<User> {
+public class UserEJB extends BaseEJB<User> implements UserLocal<User, User, Group> {
 
 	/**
 	 * 

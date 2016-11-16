@@ -52,6 +52,11 @@
             <artifactId>demo-ejb</artifactId>
             <type>ejb</type>
         </dependency>
+        <dependency>
+            <groupId>ca.ljz</groupId>
+            <artifactId>demo-interface</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

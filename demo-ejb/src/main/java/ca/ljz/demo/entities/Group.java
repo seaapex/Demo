@@ -20,7 +20,7 @@ import java.util.List;
 		@NamedQuery(name = Group.QUERY_NAME, query = "SELECT g FROM Group g WHERE g.name = :name") })
 @XmlRootElement
 @XmlType(propOrder = { "uuid", "name", "creatTime", "editTime" })
-public class Group extends Base {
+public class Group extends Base implements IGroup<User, Group> {
 
 	/**
 	 * 
@@ -61,22 +61,26 @@ public class Group extends Base {
 	public Group() {
 	}
 
+	@Override
 	public String getName() {
 		logger.info("getName");
 		return this.name;
 	}
 
+	@Override
 	public void setName(String name) {
 		logger.info("setName");
 		this.name = name;
 	}
 
 	@XmlTransient
+	@Override
 	public List<User> getUsers() {
 		logger.info("getUsers");
 		return this.users;
 	}
 
+	@Override
 	public void setUsers(List<User> users) {
 		logger.info("setUsers");
 		this.users = users;

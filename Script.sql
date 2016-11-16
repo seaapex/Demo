@@ -1,4 +1,7 @@
+drop database DEMO;
 create database DEMO;
+
+use DEMO;
 
 -- table creation
 drop table DEMO_USER_GROUP;

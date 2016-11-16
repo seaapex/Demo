@@ -22,8 +22,9 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.ljz.demo.ejbs.UserEJB;
-import ca.ljz.demo.entities.User;
+import ca.ljz.demo.ejbs.UserLocal;
+import ca.ljz.demo.entities.IGroup;
+import ca.ljz.demo.entities.IUser;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,7 +36,7 @@ public class UserResource {
 	Logger logger = LoggerFactory.getLogger(UserResource.class);
 
 	@EJB
-	UserEJB userEJB;
+	UserLocal<? extends IUser, ? extends IUser, ? extends IGroup> userEJB;
 
 	@Resource
 	SessionContext sc;
@@ -44,7 +45,7 @@ public class UserResource {
 	@RolesAllowed("admin")
 	public Response findAll() {
 		logger.info("findAll");
-		List<User> users = userEJB.search(null);
+		List<? extends IUser> users = userEJB.search(null);
 		return Response.status(Status.OK).entity(users).build();
 	}
 
@@ -53,16 +54,15 @@ public class UserResource {
 	@RolesAllowed({ "admin", "user" })
 	public Response findById(@PathParam("id") String id) {
 		logger.info("findById");
-		User user = userEJB.get(id);
-		return Response.status(Status.OK).entity(user).build();
+		return Response.status(Status.OK).entity(userEJB.get(id)).build();
 	}
 
-	@PUT
-	@PermitAll
-	public Response createUser(User user) {
-		logger.info("createUser");
-		String id = userEJB.add(user);
-		return Response.status(Status.OK).entity(id).build();
-	}
+//	@PUT
+//	@PermitAll
+//	public Response createUser(U user) {
+//		logger.info("createUser");
+//		String id = userEJB.add(user);
+//		return Response.status(Status.OK).entity(id).build();
+//	}
 
 }

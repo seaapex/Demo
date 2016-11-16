@@ -43,11 +43,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Dependency on the EJB module so we can use it's services if needed -->
+		<!-- Dependency on the Interface module so we can use it's services if needed -->
 		<dependency>
 			<groupId>ca.ljz</groupId>
-			<artifactId>demo-ejb</artifactId>
-			<type>ejb</type>
+			<artifactId>demo-interface</artifactId>
+			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
 

@@ -5,12 +5,13 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 import ca.ljz.demo.entities.Group;
+import ca.ljz.demo.entities.User;
 
 /**
  * Session Bean implementation class GroupEJB
  */
 @Stateless
-public class GroupEJB extends BaseEJB<Group> {
+public class GroupEJB extends BaseEJB<Group> implements GroupLocal<Group, User, Group> {
 
 	/**
 	 * 
@@ -30,7 +31,7 @@ public class GroupEJB extends BaseEJB<Group> {
 			groups = em.createNamedQuery(Group.QUERY_ALL, getEntityType()).getResultList();
 		} else {
 		}
-		
+
 		return groups;
 	}
 

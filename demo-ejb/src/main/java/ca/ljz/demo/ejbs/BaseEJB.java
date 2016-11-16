@@ -1,8 +1,5 @@
 package ca.ljz.demo.ejbs;
 
-import java.io.Serializable;
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -14,11 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ca.ljz.demo.entities.Base;
+import ca.ljz.demo.entities.Group;
 import ca.ljz.demo.entities.User;
 import ca.ljz.demo.utils.UUIDUtils;
 
 @Stateless
-public abstract class BaseEJB<T extends Base> implements Serializable {
+public abstract class BaseEJB<T extends Base> implements ILocal<T, User, Group> {
 
 	/**
 	 * 
@@ -33,12 +31,14 @@ public abstract class BaseEJB<T extends Base> implements Serializable {
 	@Resource
 	SessionContext ctx;
 
+	@Override
 	public T get(String id) {
 		logger.info("get");
 		T t = em.find(getEntityType(), UUIDUtils.uuidToByteArray(id));
 		return t;
 	}
 
+	@Override
 	public T update(T entity) {
 		logger.info("update");
 		entity.setEditor(getCaller());
@@ -46,6 +46,7 @@ public abstract class BaseEJB<T extends Base> implements Serializable {
 		return em.merge(entity);
 	}
 
+	@Override
 	public String add(T entity) {
 		logger.info("add");
 		User caller = getCaller();
@@ -69,14 +70,13 @@ public abstract class BaseEJB<T extends Base> implements Serializable {
 		return id;
 	}
 
+	@Override
 	public T delete(String id) {
 		logger.info("delete");
 		T entity = get(id);
 		em.remove(entity);
 		return entity;
 	}
-
-	public abstract List<T> search(T entity);
 
 	protected abstract Class<T> getEntityType();
 

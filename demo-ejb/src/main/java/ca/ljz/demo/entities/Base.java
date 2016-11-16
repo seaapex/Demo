@@ -1,6 +1,5 @@
 package ca.ljz.demo.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,7 +20,7 @@ import ca.ljz.demo.utils.UUIDUtils;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class Base implements Serializable {
+public abstract class Base implements IModel<User, Group> {
 
 	/**
 	 * 
@@ -56,6 +55,7 @@ public abstract class Base implements Serializable {
 	 * @return id
 	 */
 	@XmlTransient
+	@Override
 	public byte[] getId() {
 		if (this.id == null || this.id.length != 16) {
 
@@ -67,38 +67,45 @@ public abstract class Base implements Serializable {
 		return this.id;
 	}
 
+	@Override
 	public String getUUID() {
 		return UUIDUtils.byteArrayToUUIDString(getId());
 	}
 
+	@Override
 	public void setUUID(String id) {
 		this.id = UUIDUtils.uuidToByteArray(id);
 	}
 
-
+	@Override
 	public Date getCreatTime() {
 		return this.creatTime;
 	}
 
+	@Override
 	public Date getEditTime() {
 		return this.editTime;
 	}
 
 	@XmlTransient
+	@Override
 	public User getCreator() {
 		return this.creator;
 	}
-	
-	public void setCreator(User creator){
+
+	@Override
+	public void setCreator(User creator) {
 		this.creator = creator;
 	}
 
 	@XmlTransient
+	@Override
 	public User getEditor() {
 		return this.editor;
 	}
-	
-	public void setEditor(User editor){
+
+	@Override
+	public void setEditor(User editor) {
 		this.editor = editor;
 	}
 
@@ -112,6 +119,5 @@ public abstract class Base implements Serializable {
 	protected void preupdate() {
 		this.editTime = new Date();
 	}
-	
-	
+
 }
