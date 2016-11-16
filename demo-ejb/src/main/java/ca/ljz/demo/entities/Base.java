@@ -16,16 +16,21 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ca.ljz.demo.utils.UUIDUtils;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class Base implements IModel<User, Group> {
+public abstract class Base implements IModel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8764276953073217499L;
+	
+	protected transient final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Id
 	@Column(unique = true, nullable = false, length = 16)
@@ -40,14 +45,14 @@ public abstract class Base implements IModel<User, Group> {
 	private Date editTime;
 
 	// uni-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "CREATOR_ID", nullable = false)
-	private User creator;
+	private IUser creator;
 
 	// uni-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "EDITOR_ID", nullable = false)
-	private User editor;
+	private IUser editor;
 
 	/**
 	 * This method is only used by JPA. Data within is not human readable.
@@ -89,23 +94,23 @@ public abstract class Base implements IModel<User, Group> {
 
 	@XmlTransient
 	@Override
-	public User getCreator() {
+	public IUser getCreator() {
 		return this.creator;
 	}
 
 	@Override
-	public void setCreator(User creator) {
+	public void setCreator(IUser creator) {
 		this.creator = creator;
 	}
 
 	@XmlTransient
 	@Override
-	public User getEditor() {
+	public IUser getEditor() {
 		return this.editor;
 	}
 
 	@Override
-	public void setEditor(User editor) {
+	public void setEditor(IUser editor) {
 		this.editor = editor;
 	}
 

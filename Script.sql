@@ -4,10 +4,6 @@ create database DEMO;
 use DEMO;
 
 -- table creation
-drop table DEMO_USER_GROUP;
-drop table DEMO_GROUP;
-drop table DEMO_USER;
-
 create table DEMO_USER(
   ID binary(16) not null unique,
 --  ID raw(16) not null unique, -- For Oracle
@@ -67,10 +63,10 @@ select * from DEMO_GROUP;
 select * from DEMO_USER_GROUP;
 
 -- principalsQuery test
-select password from demo_user where name='demo'
+select password from demo_user where name='demo';
 -- rolesQuery test
-select g.name, 'Roles' from demo_user u, demo_group g, demo_user_group ug where u.name='demo' and u.id=ug.user_id and g.id=ug.group_id
+select g.name, 'Roles' from demo_user u, demo_group g, demo_user_group ug where u.name='demo' and u.id=ug.user_id and g.id=ug.group_id;
 
 -- test purpose statements
-update DEMO_USER set PASSWORD='2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea' where USERNAME='demo' 
-select concat('8',password,'8') from demo_user where username='demo'
+update DEMO_USER set PASSWORD='2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea' where USERNAME='demo';
+select concat('8',password,'8') from demo_user where username='demo';

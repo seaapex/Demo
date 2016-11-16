@@ -11,19 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ca.ljz.demo.entities.Base;
-import ca.ljz.demo.entities.Group;
 import ca.ljz.demo.entities.User;
 import ca.ljz.demo.utils.UUIDUtils;
 
 @Stateless
-public abstract class BaseEJB<T extends Base> implements ILocal<T, User, Group> {
+public abstract class BaseEJB<T extends Base> implements ILocal<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1879756223965095751L;
 
-	Logger logger = LoggerFactory.getLogger(BaseEJB.class);
+	protected transient final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@PersistenceContext
 	EntityManager em;

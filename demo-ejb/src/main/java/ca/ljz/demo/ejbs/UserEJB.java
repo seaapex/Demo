@@ -4,14 +4,13 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
-import ca.ljz.demo.entities.Group;
 import ca.ljz.demo.entities.User;
 
 /**
  * Session Bean implementation class UserEJB
  */
 @Stateless
-public class UserEJB extends BaseEJB<User> implements UserLocal<User, User, Group> {
+public class UserEJB extends BaseEJB<User> implements UserLocal<User> {
 
 	/**
 	 * 
@@ -20,11 +19,13 @@ public class UserEJB extends BaseEJB<User> implements UserLocal<User, User, Grou
 
 	@Override
 	protected Class<User> getEntityType() {
+		logger.info("getEntityType");
 		return User.class;
 	}
 
 	@Override
 	public List<User> search(User entity) {
+		logger.info("search");
 		List<User> users = null;
 
 		if (entity == null) {

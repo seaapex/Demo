@@ -3,11 +3,14 @@ package ca.ljz.demo.entities;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-public interface IUser<U extends IUser<U, G>, G extends IGroup<U, G>> extends IModel<U, G> {
+@XmlRootElement(name = "user")
+public interface IUser extends IModel {
 	public String getName();
 
+	@XmlElement
 	public void setName(String name);
 
 	@XmlTransient
@@ -16,7 +19,8 @@ public interface IUser<U extends IUser<U, G>, G extends IGroup<U, G>> extends IM
 	@XmlElement
 	public void setPassword(String password);
 
-	public List<G> getGroups();
+	public List<IGroup> getGroups();
 
-	public void setGroups(List<G> groups);
+	@XmlElement
+	public void setGroups(List<IGroup> groups);
 }

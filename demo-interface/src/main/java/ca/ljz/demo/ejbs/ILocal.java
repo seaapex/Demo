@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import ca.ljz.demo.entities.IGroup;
 import ca.ljz.demo.entities.IModel;
-import ca.ljz.demo.entities.IUser;
 
 @Local
-public interface ILocal<T extends IModel<U, G>, U extends IUser<U, G>, G extends IGroup<U, G>> extends Serializable {
+public interface ILocal<T extends IModel> extends Serializable {
 	public T get(String id);
 
 	public T update(T entity);

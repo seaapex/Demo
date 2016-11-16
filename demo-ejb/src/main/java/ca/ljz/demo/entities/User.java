@@ -7,9 +7,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ca.ljz.demo.xml.adapters.PasswordAdapter;
 
 import java.util.List;
@@ -24,7 +21,7 @@ import java.util.List;
 		@NamedQuery(name = User.QUERY_NAME, query = "SELECT u FROM User u WHERE u.name = :name") })
 @XmlRootElement
 @XmlType(propOrder = { "uuid", "name", "password", "creatTime", "editTime", "groups" })
-public class User extends Base implements IUser<User, Group> {
+public class User extends Base implements IUser {
 
 	/**
 	 * 
@@ -33,8 +30,6 @@ public class User extends Base implements IUser<User, Group> {
 
 	public static final String QUERY_ALL = "User.findAll";
 	public static final String QUERY_NAME = "User.findByName";
-
-	transient Logger logger = LoggerFactory.getLogger(User.class);
 
 	@Column(nullable = false, length = 20)
 	private String name;
@@ -54,11 +49,11 @@ public class User extends Base implements IUser<User, Group> {
 	 * user creation, client needs to update group(s) to assign user in to the
 	 * group(s)
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity = Group.class)
 	@JoinTable(name = "demo_user_group", joinColumns = {
 			@JoinColumn(name = "USER_ID", nullable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "GROUP_ID", nullable = false) })
-	private List<Group> groups;
+	private List<IGroup> groups;
 
 	public User() {
 	}
@@ -91,13 +86,13 @@ public class User extends Base implements IUser<User, Group> {
 	}
 
 	@Override
-	public List<Group> getGroups() {
+	public List<IGroup> getGroups() {
 		logger.info("getGroups");
 		return this.groups;
 	}
 
 	@Override
-	public void setGroups(List<Group> groups) {
+	public void setGroups(List<IGroup> groups) {
 		logger.info("setGroups");
 		this.groups = groups;
 	}

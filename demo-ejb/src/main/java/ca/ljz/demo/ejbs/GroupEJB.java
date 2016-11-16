@@ -5,13 +5,12 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 import ca.ljz.demo.entities.Group;
-import ca.ljz.demo.entities.User;
 
 /**
  * Session Bean implementation class GroupEJB
  */
 @Stateless
-public class GroupEJB extends BaseEJB<Group> implements GroupLocal<Group, User, Group> {
+public class GroupEJB extends BaseEJB<Group> implements GroupLocal<Group> {
 
 	/**
 	 * 
@@ -20,11 +19,13 @@ public class GroupEJB extends BaseEJB<Group> implements GroupLocal<Group, User, 
 
 	@Override
 	protected Class<Group> getEntityType() {
+		logger.info("getEntityType");
 		return Group.class;
 	}
 
 	@Override
 	public List<Group> search(Group entity) {
+		logger.info("search");
 		List<Group> groups = null;
 
 		if (entity == null) {

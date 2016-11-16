@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ca.ljz.demo.ejbs.UserLocal;
-import ca.ljz.demo.entities.IGroup;
 import ca.ljz.demo.entities.IUser;
 
 @Path("user")
@@ -36,7 +35,7 @@ public class UserResource {
 	Logger logger = LoggerFactory.getLogger(UserResource.class);
 
 	@EJB
-	UserLocal<? extends IUser, ? extends IUser, ? extends IGroup> userEJB;
+	UserLocal<IUser> userEJB;
 
 	@Resource
 	SessionContext sc;
@@ -45,7 +44,7 @@ public class UserResource {
 	@RolesAllowed("admin")
 	public Response findAll() {
 		logger.info("findAll");
-		List<? extends IUser> users = userEJB.search(null);
+		List<IUser> users = userEJB.search(null);
 		return Response.status(Status.OK).entity(users).build();
 	}
 
@@ -57,12 +56,12 @@ public class UserResource {
 		return Response.status(Status.OK).entity(userEJB.get(id)).build();
 	}
 
-//	@PUT
-//	@PermitAll
-//	public Response createUser(U user) {
-//		logger.info("createUser");
-//		String id = userEJB.add(user);
-//		return Response.status(Status.OK).entity(id).build();
-//	}
+	@PUT
+	@PermitAll
+	public Response createUser(IUser user) {
+		logger.info("createUser");
+		String id = userEJB.add(user);
+		return Response.status(Status.OK).entity(id).build();
+	}
 
 }

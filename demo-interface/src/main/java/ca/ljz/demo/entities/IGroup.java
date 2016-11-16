@@ -2,15 +2,20 @@ package ca.ljz.demo.entities;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-public interface IGroup<U extends IUser<U, G>, G extends IGroup<U, G>> extends IModel<U, G> {
+@XmlRootElement(name = "group")
+public interface IGroup extends IModel {
 	public String getName();
 
+	@XmlElement
 	public void setName(String name);
 
 	@XmlTransient
-	public List<U> getUsers();
+	public List<IUser> getUsers();
 
-	public void setUsers(List<U> users);
+	@XmlElement
+	public void setUsers(List<IUser> users);
 }

@@ -5,9 +5,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 /**
@@ -20,14 +17,12 @@ import java.util.List;
 		@NamedQuery(name = Group.QUERY_NAME, query = "SELECT g FROM Group g WHERE g.name = :name") })
 @XmlRootElement
 @XmlType(propOrder = { "uuid", "name", "creatTime", "editTime" })
-public class Group extends Base implements IGroup<User, Group> {
+public class Group extends Base implements IGroup {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1536961265567927480L;
-
-	transient Logger logger = LoggerFactory.getLogger(Group.class);
 
 	public static final String QUERY_ALL = "Group.findAll";
 	public static final String QUERY_NAME = "Group.findByName";
@@ -55,8 +50,8 @@ public class Group extends Base implements IGroup<User, Group> {
 	 * user creation, client needs to update group(s) to assign user in to the
 	 * group(s)
 	 */
-	@ManyToMany(mappedBy = "groups")
-	private List<User> users;
+	@ManyToMany(targetEntity = User.class, mappedBy = "groups")
+	private List<IUser> users;
 
 	public Group() {
 	}
@@ -75,13 +70,13 @@ public class Group extends Base implements IGroup<User, Group> {
 
 	@XmlTransient
 	@Override
-	public List<User> getUsers() {
+	public List<IUser> getUsers() {
 		logger.info("getUsers");
 		return this.users;
 	}
 
 	@Override
-	public void setUsers(List<User> users) {
+	public void setUsers(List<IUser> users) {
 		logger.info("setUsers");
 		this.users = users;
 	}

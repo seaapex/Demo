@@ -5,7 +5,7 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-public interface IModel<U extends IUser<U, G>, G extends IGroup<U, G>> extends Serializable {
+public interface IModel extends Serializable {
 
 	@XmlTransient
 	public byte[] getId();
@@ -19,12 +19,12 @@ public interface IModel<U extends IUser<U, G>, G extends IGroup<U, G>> extends S
 	public Date getEditTime();
 
 	@XmlTransient
-	public U getCreator();
+	public IUser getCreator();
 
-	public void setCreator(U creator);
+	public void setCreator(IUser creator);
 
 	@XmlTransient
-	public U getEditor();
+	public IUser getEditor();
 
-	public void setEditor(U editor);
+	public void setEditor(IUser editor);
 }
