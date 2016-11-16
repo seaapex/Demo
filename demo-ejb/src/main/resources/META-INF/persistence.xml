@@ -15,7 +15,7 @@
         http://xmlns.jcp.org/xml/ns/persistence
         http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="demo-pu" transaction-type="JTA">
-	<jta-data-source>java:/DemoDS</jta-data-source>
+	<jta-data-source>jdbc/NotesDB</jta-data-source>
 	<class>ca.ljz.demo.entities.Base</class>
 	<class>ca.ljz.demo.entities.Group</class>
 	<class>ca.ljz.demo.entities.User</class>
