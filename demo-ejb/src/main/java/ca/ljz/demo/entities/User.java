@@ -1,98 +1,157 @@
 package ca.ljz.demo.entities;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import ca.ljz.demo.xml.adapters.PasswordAdapter;
-
 import java.util.List;
 
 /**
- * The persistent class for the demo_user database table.
+ * The persistent class for the nk_user database table.
  * 
  */
 @Entity
-@Table(name = "demo_user")
+@Table(name = "nk_user")
 @NamedQueries({ @NamedQuery(name = User.QUERY_ALL, query = "SELECT u FROM User u"),
-		@NamedQuery(name = User.QUERY_NAME, query = "SELECT u FROM User u WHERE u.name = :name") })
-@XmlRootElement
-@XmlType(propOrder = { "uuid", "name", "password", "creatTime", "editTime", "groups" })
+		@NamedQuery(name = User.QUERY_NAME, query = "SELECT u FROM User u WHERE u.username = :username") })
 public class User extends Base {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5903024118862091874L;
+	private static final long serialVersionUID = 8062894963248046669L;
 
 	public static final String QUERY_ALL = "User.findAll";
 	public static final String QUERY_NAME = "User.findByName";
 
-	transient Logger logger = LoggerFactory.getLogger(User.class);
+	@Column(nullable = false, length = 50)
+	private String email;
 
-	@Column(nullable = false, length = 20)
-	private String name;
+	@Column(length = 20)
+	private String firstname;
+
+	@Column
+	private char gender;
+
+	@Column(length = 20)
+	private String lastname;
+
+	@Column(name = "NAME", nullable = false, length = 30)
+	private String username;
 
 	@Column(nullable = false, length = 44)
 	private String password;
 
-	/*
-	 * // bi-directional many-to-many association to Group
-	 * 
-	 * @ManyToMany(mappedBy = "users") private List<Group> groups;
-	 */
+	@Column(length = 15)
+	private String phonenumber;
 
-	/*
-	 * To map the relationship on the user side (current solution) will allow
-	 * client to store group association when creating user. Otherwise, after
-	 * user creation, client needs to update group(s) to assign user in to the
-	 * group(s)
-	 */
+	// bi-directional many-to-one association to Note
+	@OneToMany(mappedBy = "owner")
+	private List<Note> ownedNotes;
+
+	// bi-directional many-to-many association to Note
+	@ManyToMany(mappedBy = "collaborators")
+	private List<Note> collaboratedNotes;
+
+	// uni-directional many-to-many association to Role
 	@ManyToMany
-	@JoinTable(name = "demo_user_group", joinColumns = {
+	@JoinTable(name = "nk_user_role", joinColumns = {
 			@JoinColumn(name = "USER_ID", nullable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "GROUP_ID", nullable = false) })
-	private List<Group> groups;
+					@JoinColumn(name = "ROLE_ID", nullable = false) })
+	private List<Role> roles;
 
 	public User() {
 	}
 
-	public String getName() {
-		logger.info("getName");
-		return this.name;
+	public String getEmail() {
+		return this.email;
 	}
 
-	public void setName(String name) {
-		logger.info("setName");
-		this.name = name;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	@XmlTransient
+	public String getFirstname() {
+		return this.firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public char getGender() {
+		return this.gender;
+	}
+
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+
+	public String getLastname() {
+		return this.lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getPassword() {
-		logger.info("getPassword");
 		return this.password;
 	}
 
-	@XmlElement
-	@XmlJavaTypeAdapter(PasswordAdapter.class)
 	public void setPassword(String password) {
-		logger.info("setPassword");
 		this.password = password;
 	}
 
-	public List<Group> getGroups() {
-		logger.info("getGroups");
-		return this.groups;
+	public String getPhonenumber() {
+		return this.phonenumber;
 	}
 
-	public void setGroups(List<Group> groups) {
-		logger.info("setGroups");
-		this.groups = groups;
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
 	}
+
+	public List<Note> getOwnedNotes() {
+		return this.ownedNotes;
+	}
+
+	public void setOwnedNotes(List<Note> ownedNotes) {
+		this.ownedNotes = ownedNotes;
+	}
+
+	public Note addOwnedNote(Note ownedNote) {
+		getOwnedNotes().add(ownedNote);
+		ownedNote.setOwner(this);
+
+		return ownedNote;
+	}
+
+	public Note removeOwnedNote(Note ownedNote) {
+		getOwnedNotes().remove(ownedNote);
+		ownedNote.setOwner(null);
+
+		return ownedNote;
+	}
+
+	public List<Note> getCollaboratedNotes() {
+		return this.collaboratedNotes;
+	}
+
+	public void setCollaboratedNotes(List<Note> collaboratedNotes) {
+		this.collaboratedNotes = collaboratedNotes;
+	}
+
+	public List<Role> getRoles() {
+		return this.roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
 }

@@ -17,7 +17,8 @@
 	<persistence-unit name="demo-pu" transaction-type="JTA">
 	<jta-data-source>jdbc/NotesDB</jta-data-source>
 	<class>ca.ljz.demo.entities.Base</class>
-	<class>ca.ljz.demo.entities.Group</class>
+	<class>ca.ljz.demo.entities.Note</class>
+	<class>ca.ljz.demo.entities.Role</class>
 	<class>ca.ljz.demo.entities.User</class>
 		<properties>
 			<property name="hibernate.enable_lazy_load_no_trans" value="true"/>
