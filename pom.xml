@@ -73,8 +73,8 @@
 				<type>ejb</type>
 			</dependency>
 
-			<!-- Define the version of the Interface jar so that we don't need to repeat 
-				ourselves in every module -->
+			<!-- Define the version of the Interface jar so that we don't need to 
+				repeat ourselves in every module -->
 			<dependency>
 				<groupId>ca.ljz</groupId>
 				<artifactId>demo-interface</artifactId>
@@ -115,7 +115,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.21</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

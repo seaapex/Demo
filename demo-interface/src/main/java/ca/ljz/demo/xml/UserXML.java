@@ -1,6 +1,5 @@
-package ca.ljz.demo.entities;
+package ca.ljz.demo.xml;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -17,13 +16,9 @@ import java.util.List;
  * The persistent class for the demo_user database table.
  * 
  */
-@Entity
-@Table(name = "demo_user")
-@NamedQueries({ @NamedQuery(name = User.QUERY_ALL, query = "SELECT u FROM User u"),
-		@NamedQuery(name = User.QUERY_NAME, query = "SELECT u FROM User u WHERE u.name = :name") })
 @XmlRootElement
 @XmlType(propOrder = { "uuid", "name", "password", "creatTime", "editTime", "groups" })
-public class User extends Base implements UserModel {
+public class UserXML extends BaseXML implements UserModel {
 
 	/**
 	 * 
@@ -33,31 +28,13 @@ public class User extends Base implements UserModel {
 	public static final String QUERY_ALL = "User.findAll";
 	public static final String QUERY_NAME = "User.findByName";
 
-	@Column(nullable = false, length = 20)
 	private String name;
 
-	@Column(nullable = false, length = 44)
 	private String password;
 
-	/*
-	 * // bi-directional many-to-many association to Group
-	 * 
-	 * @ManyToMany(mappedBy = "users") private List<Group> groups;
-	 */
-
-	/*
-	 * To map the relationship on the user side (current solution) will allow
-	 * client to store group association when creating user. Otherwise, after
-	 * user creation, client needs to update group(s) to assign user in to the
-	 * group(s)
-	 */
-	@ManyToMany(targetEntity = Group.class)
-	@JoinTable(name = "demo_user_group", joinColumns = {
-			@JoinColumn(name = "USER_ID", nullable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "GROUP_ID", nullable = false) })
 	private List<GroupModel> groups;
 
-	public User() {
+	public UserXML() {
 	}
 
 	@Override
@@ -88,12 +65,15 @@ public class User extends Base implements UserModel {
 	}
 
 	@Override
+	@XmlElement(type = GroupXML.class)
 	public List<GroupModel> getGroups() {
 		logger.info("getGroups");
 		return this.groups;
 	}
 
 	@Override
+	// Instead of setting GroupModel to causes problem, jaxb will use GroupXML
+	@XmlElement(type = GroupXML.class)
 	public void setGroups(List<GroupModel> groups) {
 		logger.info("setGroups");
 		this.groups = groups;

@@ -1,11 +1,11 @@
-package ca.ljz.demo.entities;
+package ca.ljz.demo.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-public interface IModel extends Serializable {
+public interface BaseModel extends Serializable {
 
 	@XmlTransient
 	public byte[] getId();
@@ -19,12 +19,12 @@ public interface IModel extends Serializable {
 	public Date getEditTime();
 
 	@XmlTransient
-	public IUser getCreator();
+	public UserModel getCreator();
 
-	public void setCreator(IUser creator);
+	public void setCreator(UserModel creator);
 
 	@XmlTransient
-	public IUser getEditor();
+	public UserModel getEditor();
 
-	public void setEditor(IUser editor);
+	public void setEditor(UserModel editor);
 }

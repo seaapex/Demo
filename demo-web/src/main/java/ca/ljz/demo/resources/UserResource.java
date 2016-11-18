@@ -22,8 +22,9 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.ljz.demo.ejbs.UserLocal;
-import ca.ljz.demo.entities.IUser;
+import ca.ljz.demo.ejbs.local.UserLocal;
+import ca.ljz.demo.model.UserModel;
+import ca.ljz.demo.xml.UserXML;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,10 +33,10 @@ import ca.ljz.demo.entities.IUser;
 @DeclareRoles({ "admin", "user" })
 public class UserResource {
 
-	Logger logger = LoggerFactory.getLogger(UserResource.class);
+	private transient final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@EJB
-	UserLocal<IUser> userEJB;
+	UserLocal<UserModel> userEJB;
 
 	@Resource
 	SessionContext sc;
@@ -44,7 +45,7 @@ public class UserResource {
 	@RolesAllowed("admin")
 	public Response findAll() {
 		logger.info("findAll");
-		List<IUser> users = userEJB.search(null);
+		List<UserModel> users = userEJB.search(null);
 		return Response.status(Status.OK).entity(users).build();
 	}
 
@@ -58,9 +59,10 @@ public class UserResource {
 
 	@PUT
 	@PermitAll
-	public Response createUser(IUser user) {
+	public Response createUser(UserXML user) {
 		logger.info("createUser");
-		String id = userEJB.add(user);
+		logger.info("User Name" + user.getName());
+		String id = userEJB.add((UserModel) user);
 		return Response.status(Status.OK).entity(id).build();
 	}
 

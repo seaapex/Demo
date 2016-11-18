@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import ca.ljz.demo.model.GroupModel;
+import ca.ljz.demo.model.UserModel;
+
 import java.util.List;
 
 /**
@@ -17,7 +20,7 @@ import java.util.List;
 		@NamedQuery(name = Group.QUERY_NAME, query = "SELECT g FROM Group g WHERE g.name = :name") })
 @XmlRootElement
 @XmlType(propOrder = { "uuid", "name", "creatTime", "editTime" })
-public class Group extends Base implements IGroup {
+public class Group extends Base implements GroupModel {
 
 	/**
 	 * 
@@ -51,7 +54,7 @@ public class Group extends Base implements IGroup {
 	 * group(s)
 	 */
 	@ManyToMany(targetEntity = User.class, mappedBy = "groups")
-	private List<IUser> users;
+	private List<UserModel> users;
 
 	public Group() {
 	}
@@ -70,13 +73,13 @@ public class Group extends Base implements IGroup {
 
 	@XmlTransient
 	@Override
-	public List<IUser> getUsers() {
+	public List<UserModel> getUsers() {
 		logger.info("getUsers");
 		return this.users;
 	}
 
 	@Override
-	public void setUsers(List<IUser> users) {
+	public void setUsers(List<UserModel> users) {
 		logger.info("setUsers");
 		this.users = users;
 	}

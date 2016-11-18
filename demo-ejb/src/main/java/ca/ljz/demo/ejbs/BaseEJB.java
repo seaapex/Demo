@@ -3,6 +3,7 @@ package ca.ljz.demo.ejbs;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -10,12 +11,16 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.ljz.demo.entities.Base;
+import ca.ljz.demo.ejbs.interceptors.DataTransferInterceptor;
+import ca.ljz.demo.ejbs.local.ILocal;
 import ca.ljz.demo.entities.User;
+import ca.ljz.demo.model.BaseModel;
+import ca.ljz.demo.model.UserModel;
 import ca.ljz.demo.utils.UUIDUtils;
 
 @Stateless
-public abstract class BaseEJB<T extends Base> implements ILocal<T> {
+@Interceptors({ DataTransferInterceptor.class })
+public abstract class BaseEJB<T extends BaseModel> implements ILocal<T> {
 
 	/**
 	 * 
@@ -48,12 +53,12 @@ public abstract class BaseEJB<T extends Base> implements ILocal<T> {
 	@Override
 	public String add(T entity) {
 		logger.info("add");
-		User caller = getCaller();
+		UserModel caller = getCaller();
 
 		if (caller == null) {
-			if (entity instanceof User) {
+			if (entity instanceof UserModel) {
 				logger.info("Self User Registration");
-				caller = (User) entity;
+				caller = (UserModel) entity;
 			} else {
 				logger.debug("Unauthorized creation of an entity");
 				throw new RuntimeException("Unauthorized creation of an entity");
@@ -79,15 +84,16 @@ public abstract class BaseEJB<T extends Base> implements ILocal<T> {
 
 	protected abstract Class<T> getEntityType();
 
-	private User getCaller() {
+	private UserModel getCaller() {
 		logger.info("getCaller");
-		User caller = null;
+		UserModel caller = null;
 		try {
 			String name = ctx.getCallerPrincipal().getName();
 			TypedQuery<User> tq = em.createNamedQuery(User.QUERY_NAME, User.class);
 
 			tq.setParameter("name", name);
 			caller = tq.getSingleResult();
+			logger.debug("getCaller - caller is: " + caller.getName());
 		} catch (Exception e) {
 			logger.info("no caller");
 		}

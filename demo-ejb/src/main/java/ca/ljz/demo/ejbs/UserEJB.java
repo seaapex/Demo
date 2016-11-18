@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import ca.ljz.demo.ejbs.local.UserLocal;
 import ca.ljz.demo.entities.User;
 
 /**

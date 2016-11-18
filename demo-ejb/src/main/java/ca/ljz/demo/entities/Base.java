@@ -19,11 +19,13 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ca.ljz.demo.model.BaseModel;
+import ca.ljz.demo.model.UserModel;
 import ca.ljz.demo.utils.UUIDUtils;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class Base implements IModel {
+public abstract class Base implements BaseModel {
 
 	/**
 	 * 
@@ -47,12 +49,12 @@ public abstract class Base implements IModel {
 	// uni-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "CREATOR_ID", nullable = false)
-	private IUser creator;
+	private UserModel creator;
 
 	// uni-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "EDITOR_ID", nullable = false)
-	private IUser editor;
+	private UserModel editor;
 
 	/**
 	 * This method is only used by JPA. Data within is not human readable.
@@ -94,23 +96,23 @@ public abstract class Base implements IModel {
 
 	@XmlTransient
 	@Override
-	public IUser getCreator() {
+	public UserModel getCreator() {
 		return this.creator;
 	}
 
 	@Override
-	public void setCreator(IUser creator) {
+	public void setCreator(UserModel creator) {
 		this.creator = creator;
 	}
 
 	@XmlTransient
 	@Override
-	public IUser getEditor() {
+	public UserModel getEditor() {
 		return this.editor;
 	}
 
 	@Override
-	public void setEditor(IUser editor) {
+	public void setEditor(UserModel editor) {
 		this.editor = editor;
 	}
 

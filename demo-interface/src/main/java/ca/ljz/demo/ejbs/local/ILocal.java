@@ -1,14 +1,14 @@
-package ca.ljz.demo.ejbs;
+package ca.ljz.demo.ejbs.local;
 
 import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.Local;
 
-import ca.ljz.demo.entities.IModel;
+import ca.ljz.demo.model.BaseModel;
 
 @Local
-public interface ILocal<T extends IModel> extends Serializable {
+public interface ILocal<T extends BaseModel> extends Serializable {
 	public T get(String id);
 
 	public T update(T entity);
