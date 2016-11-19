@@ -49,23 +49,22 @@ public class UserXML extends BaseXML implements UserModel {
 		this.name = name;
 	}
 
-	@XmlTransient
 	@Override
+	@XmlTransient
 	public String getPassword() {
 		logger.info("getPassword");
 		return this.password;
 	}
 
+	@Override
 	@XmlElement
 	@XmlJavaTypeAdapter(PasswordAdapter.class)
-	@Override
 	public void setPassword(String password) {
 		logger.info("setPassword");
 		this.password = password;
 	}
 
 	@Override
-	@XmlElement(type = GroupXML.class)
 	public List<GroupModel> getGroups() {
 		logger.info("getGroups");
 		return this.groups;

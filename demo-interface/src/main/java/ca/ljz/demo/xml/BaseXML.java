@@ -3,7 +3,6 @@ package ca.ljz.demo.xml;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import ca.ljz.demo.model.BaseModel;
 import ca.ljz.demo.model.UserModel;
 
-@XmlSeeAlso(UserXML.class)
 public abstract class BaseXML implements BaseModel {
 
 	/**
@@ -22,7 +20,7 @@ public abstract class BaseXML implements BaseModel {
 
 	protected transient final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private String uUID;
+	private String uuid;
 
 	private Date creatTime;
 
@@ -32,20 +30,20 @@ public abstract class BaseXML implements BaseModel {
 
 	private UserModel editor;
 
-	@XmlTransient
 	@Override
+	@XmlTransient
 	public byte[] getId() {
 		return null;
 	}
 
 	@Override
 	public String getUUID() {
-		return this.uUID;
+		return this.uuid;
 	}
 
 	@Override
 	public void setUUID(String uUID) {
-		this.uUID = uUID;
+		this.uuid = uUID;
 	}
 
 	@Override
@@ -58,8 +56,8 @@ public abstract class BaseXML implements BaseModel {
 		return this.editTime;
 	}
 
-	@XmlTransient
 	@Override
+	@XmlTransient
 	public UserModel getCreator() {
 		return this.creator;
 	}
@@ -70,8 +68,8 @@ public abstract class BaseXML implements BaseModel {
 		this.creator = creator;
 	}
 
-	@XmlTransient
 	@Override
+	@XmlTransient
 	public UserModel getEditor() {
 		return this.editor;
 	}

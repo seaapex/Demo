@@ -1,10 +1,6 @@
 package ca.ljz.demo.entities;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +17,6 @@ import java.util.List;
 @Table(name = "demo_group")
 @NamedQueries({ @NamedQuery(name = Group.QUERY_ALL, query = "SELECT g FROM Group g"),
 		@NamedQuery(name = Group.QUERY_NAME, query = "SELECT g FROM Group g WHERE g.name = :name") })
-//@XmlRootElement
-//@XmlType(propOrder = { "uuid", "name", "creatTime", "editTime" })
 public class Group extends Base implements GroupModel {
 
 	/**
@@ -76,7 +70,6 @@ public class Group extends Base implements GroupModel {
 		this.name = name;
 	}
 
-//	@XmlTransient
 	@Override
 	public List<UserModel> getUsers() {
 		logger.info("getUsers");

@@ -14,8 +14,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +59,6 @@ public abstract class Base implements BaseModel {
 	 * 
 	 * @return id
 	 */
-//	@XmlTransient
 	@Override
 	public byte[] getId() {
 		logger.info("getId");
@@ -99,7 +96,6 @@ public abstract class Base implements BaseModel {
 		return this.editTime;
 	}
 
-//	@XmlTransient
 	@Override
 	public UserModel getCreator() {
 		logger.info("getCreator");
@@ -112,7 +108,6 @@ public abstract class Base implements BaseModel {
 		this.creator = creator;
 	}
 
-//	@XmlTransient
 	@Override
 	public UserModel getEditor() {
 		logger.info("getEditor");

@@ -43,8 +43,8 @@ public class GroupXML extends BaseXML implements GroupModel {
 		this.name = name;
 	}
 
-	@XmlTransient
 	@Override
+	@XmlTransient
 	public List<UserModel> getUsers() {
 		logger.info("getUsers");
 		return this.users;
