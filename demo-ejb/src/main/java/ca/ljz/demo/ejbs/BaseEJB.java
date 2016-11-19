@@ -53,6 +53,7 @@ public abstract class BaseEJB<T extends BaseModel> implements ILocal<T> {
 	@Override
 	public String add(T entity) {
 		logger.info("add");
+		logger.debug("add: entity - " + entity);
 		UserModel caller = getCaller();
 
 		if (caller == null) {
@@ -68,7 +69,7 @@ public abstract class BaseEJB<T extends BaseModel> implements ILocal<T> {
 		entity.setEditor(caller);
 
 		String id = entity.getUUID();
-
+		logger.debug("add: before persist");
 		em.persist(entity);
 
 		return id;

@@ -1,19 +1,14 @@
 package ca.ljz.demo.ejbs.interceptors;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.ljz.demo.entities.User;
-import ca.ljz.demo.model.BaseModel;
 import ca.ljz.demo.xml.BaseXML;
 
 @Interceptor
@@ -37,17 +32,21 @@ public class DataTransferInterceptor {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object convertData(Object obj) throws Exception {
+		if (obj == null)
+			return null;
 		if (obj instanceof BaseXML) {
 			logger.debug("this is a BaseXML");
 			String className = obj.getClass().getSimpleName();
 			Class<?> xmlClass = obj.getClass();
 			Class<?> entityClass = Class.forName(ENTITY_PACKAGE + "." + className.substring(0, className.length() - 3));
 			Object entity = entityClass.newInstance();
-			Method[] methods = xmlClass.getDeclaredMethods();
+			Method[] methods = xmlClass.getMethods();
 			for (Method method : methods) {
 				String xmlMethodName = method.getName();
 				if (xmlMethodName.startsWith("get")) {
 					logger.debug("transferData: get method detected - " + xmlMethodName);
+					if ("getClass".equals(xmlMethodName))
+						continue;
 					Object xmlData = method.invoke(obj);
 					logger.debug("transferData: get method returned - " + xmlData);
 					if (xmlData != null) {

@@ -32,7 +32,7 @@ public abstract class Base implements BaseModel {
 	 */
 	private static final long serialVersionUID = -8764276953073217499L;
 	
-	protected transient final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger logger = LoggerFactory.getLogger(Base.class);
 
 	@Id
 	@Column(unique = true, nullable = false, length = 16)
@@ -61,9 +61,10 @@ public abstract class Base implements BaseModel {
 	 * 
 	 * @return id
 	 */
-	@XmlTransient
+//	@XmlTransient
 	@Override
 	public byte[] getId() {
+		logger.info("getId");
 		if (this.id == null || this.id.length != 16) {
 
 			UUID uuid = UUID.randomUUID();
@@ -76,54 +77,64 @@ public abstract class Base implements BaseModel {
 
 	@Override
 	public String getUUID() {
+		logger.info("getUUID");
 		return UUIDUtils.byteArrayToUUIDString(getId());
 	}
 
 	@Override
 	public void setUUID(String id) {
+		logger.info("setUUID");
 		this.id = UUIDUtils.uuidToByteArray(id);
 	}
 
 	@Override
 	public Date getCreatTime() {
+		logger.info("getCreatTime");
 		return this.creatTime;
 	}
 
 	@Override
 	public Date getEditTime() {
+		logger.info("getEditTime");
 		return this.editTime;
 	}
 
-	@XmlTransient
+//	@XmlTransient
 	@Override
 	public UserModel getCreator() {
+		logger.info("getCreator");
 		return this.creator;
 	}
 
 	@Override
 	public void setCreator(UserModel creator) {
+		logger.info("setCreator");
 		this.creator = creator;
 	}
 
-	@XmlTransient
+//	@XmlTransient
 	@Override
 	public UserModel getEditor() {
+		logger.info("getEditor");
 		return this.editor;
 	}
 
 	@Override
 	public void setEditor(UserModel editor) {
+		logger.info("setEditor");
 		this.editor = editor;
 	}
 
 	@PrePersist
 	protected void prepersist() {
+		logger.info("prepersist");
 		this.creatTime = new Date();
 		preupdate();
 	}
 
 	@PreUpdate
 	protected void preupdate() {
+		logger.info("preupdate");
 		this.editTime = new Date();
 	}
 

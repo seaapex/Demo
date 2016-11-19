@@ -7,6 +7,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ca.ljz.demo.model.GroupModel;
 import ca.ljz.demo.model.UserModel;
 import ca.ljz.demo.xml.adapters.PasswordAdapter;
@@ -21,14 +24,17 @@ import java.util.List;
 @Table(name = "demo_user")
 @NamedQueries({ @NamedQuery(name = User.QUERY_ALL, query = "SELECT u FROM User u"),
 		@NamedQuery(name = User.QUERY_NAME, query = "SELECT u FROM User u WHERE u.name = :name") })
-@XmlRootElement
-@XmlType(propOrder = { "uuid", "name", "password", "creatTime", "editTime", "groups" })
+// @XmlRootElement
+// @XmlType(propOrder = { "uuid", "name", "password", "creatTime", "editTime",
+// "groups" })
 public class User extends Base implements UserModel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5903024118862091874L;
+
+	private static final Logger logger = LoggerFactory.getLogger(User.class);
 
 	public static final String QUERY_ALL = "User.findAll";
 	public static final String QUERY_NAME = "User.findByName";
@@ -51,7 +57,7 @@ public class User extends Base implements UserModel {
 	 * user creation, client needs to update group(s) to assign user in to the
 	 * group(s)
 	 */
-	@ManyToMany(targetEntity = Group.class)
+	@ManyToMany(targetEntity = Group.class/* , cascade = { CascadeType.ALL } */)
 	@JoinTable(name = "demo_user_group", joinColumns = {
 			@JoinColumn(name = "USER_ID", nullable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "GROUP_ID", nullable = false) })
@@ -72,15 +78,15 @@ public class User extends Base implements UserModel {
 		this.name = name;
 	}
 
-	@XmlTransient
+	// @XmlTransient
 	@Override
 	public String getPassword() {
 		logger.info("getPassword");
 		return this.password;
 	}
 
-	@XmlElement
-	@XmlJavaTypeAdapter(PasswordAdapter.class)
+	// @XmlElement
+	// @XmlJavaTypeAdapter(PasswordAdapter.class)
 	@Override
 	public void setPassword(String password) {
 		logger.info("setPassword");
@@ -97,5 +103,16 @@ public class User extends Base implements UserModel {
 	public void setGroups(List<GroupModel> groups) {
 		logger.info("setGroups");
 		this.groups = groups;
+	}
+	
+	/*
+	 * This method here is just for debugging
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Group UUID: "+groups.get(0).getUUID();
 	}
 }

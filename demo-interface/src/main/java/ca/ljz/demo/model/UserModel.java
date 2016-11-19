@@ -6,11 +6,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import ca.ljz.demo.xml.UserXML;
 
 @XmlRootElement(name = "user")
 @XmlSeeAlso(UserXML.class)
+@XmlType(propOrder = { "uuid", "name", "password", "creatTime", "editTime", "groups" })
 public interface UserModel extends BaseModel {
 	
 	@XmlElement
