@@ -9,23 +9,15 @@ create database NotesDB;
 use NotesDB;
 
 create table NK_USER(
-  ID binary(16) not null unique,
-  NAME varchar(30) not null unique,
-  PASSWORD char(44) not null,
+  USERNAME varchar(30) not null unique,
+  PASSWORD varchar(255) not null,
   EMAIL varchar(50) not null,
   FIRSTNAME varchar(20),
   LASTNAME varchar(20),
   PHONENUMBER varchar(15),
   GENDER char(1),
-
-  CREATOR_ID binary(16) not null,
-  CREAT_TIME date not null,
-  EDITOR_ID binary(16) not null,
-  EDIT_TIME date not null,
   
-  primary key (ID),
-  foreign key (CREATOR_ID) references NK_USER(ID),
-  foreign key (EDITOR_ID) references NK_USER(ID)
+  primary key (USERNAME)
 )engine=InnoDB default charset=UTF8;
 
 delimiter $$
@@ -61,72 +53,57 @@ end;
 $$ delimiter;
 
 create table NK_ROLE(
-  ID binary(16) not null unique,
-  NAME varchar(30) not null unique,
+  ROLENAME varchar(30) not null unique,
   
-  CREATOR_ID binary(16) not null,
-  CREAT_TIME date not null,
-  EDITOR_ID binary(16) not null,
-  EDIT_TIME date not null,
-  
-  primary key (ID),
-  foreign key (CREATOR_ID) references NK_USER(ID),
-  foreign key (EDITOR_ID) references NK_USER(ID)
+  primary key (ROLENAME)
 )engine=InnoDB default charset=UTF8;
 
 create table NK_USER_ROLE(
-  USER_ID binary(16) not null,
-  ROLE_ID binary(16) not null,
+  USERNAME varchar(30) not null,
+  ROLENAME varchar(30) not null,
   
-  primary key (USER_ID, ROLE_ID),
-  foreign key (USER_ID) references NK_USER(ID),
-  foreign key (ROLE_ID) references NK_ROLE(ID)
+  primary key (USERNAME, ROLENAME),
+  foreign key (USERNAME) references NK_USER(USERNAME),
+  foreign key (ROLENAME) references NK_ROLE(ROLENAME)
 )engine=InnoDB default charset=UTF8;
 
 create table NK_NOTE(
-  ID binary(16) not null unique,
+  NOTEID binary(16) not null unique,
   CONTENT text not null,
   TRUSHED boolean not null,
-  OWNER_ID binary(16) not null,
+  USERNAME varchar(30) not null,
   
-  CREATOR_ID binary(16) not null,
-  CREAT_TIME date not null,
-  EDITOR_ID binary(16) not null,
-  EDIT_TIME date not null,
-  
-  primary key (ID),
-  foreign key (CREATOR_ID) references NK_USER(ID),
-  foreign key (EDITOR_ID) references NK_USER(ID),
-  foreign key (OWNER_ID) references NK_USER(ID)
+  primary key (NOTEID),
+  foreign key (USERNAME) references NK_USER(USERNAME)
 )engine=InnoDB default charset=UTF8;
 
 create table NK_USER_NOTE(
-  USER_ID binary(16) not null,
-  NOTE_ID binary(16) not null,
+  USERNAME varchar(30) not null,
+  NOTEID binary(16) not null,
   
-  primary key (USER_ID, NOTE_ID),
-  foreign key (USER_ID) references NK_USER(ID),
-  foreign key (NOTE_ID) references NK_NOTE(ID)
+  primary key (USERNAME, NOTEID),
+  foreign key (USERNAME) references NK_USER(USERNAME),
+  foreign key (NOTEID) references NK_NOTE(NOTEID)
 )engine=InnoDB default charset=UTF8;
 
--- sha256 base64 value of "password": XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=
-insert into NK_USER values ('0000000000000000','admin','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M','0000000000000000',now(),'0000000000000000',now());
-insert into NK_USER values ('0000000000000001','admin1','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M','0000000000000000',now(),'0000000000000000',now());
-insert into NK_USER values ('0000000000000002','admin2','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M','0000000000000000',now(),'0000000000000000',now());
-insert into NK_USER values ('0000000000000003','user','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M','0000000000000000',now(),'0000000000000000',now());
-insert into NK_USER values ('0000000000000004','user1','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M','0000000000000000',now(),'0000000000000000',now());
-insert into NK_USER values ('0000000000000005','user2','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M','0000000000000000',now(),'0000000000000000',now());
+-- sha256 hex value of "password": 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+insert into NK_USER values ('admin','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('admin1','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('admin2','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('user','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('user1','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('user2','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
 
-insert into NK_ROLE values ('1000000000000000','admin','0000000000000000',now(),'0000000000000000',now());
-insert into NK_ROLE values ('2000000000000000','user','0000000000000000',now(),'0000000000000000',now());
+insert into NK_ROLE values ('admin');
+insert into NK_ROLE values ('user');
 
-insert into NK_USER_ROLE values ('0000000000000000','1000000000000000');
-insert into NK_USER_ROLE values ('0000000000000001','1000000000000000');
-insert into NK_USER_ROLE values ('0000000000000002','1000000000000000');
+insert into NK_USER_ROLE values ('admin','admin');
+insert into NK_USER_ROLE values ('admin1','admin');
+insert into NK_USER_ROLE values ('admin2','admin');
 
-insert into NK_USER_ROLE values ('0000000000000000','2000000000000000');
-insert into NK_USER_ROLE values ('0000000000000001','2000000000000000');
-insert into NK_USER_ROLE values ('0000000000000002','2000000000000000');
-insert into NK_USER_ROLE values ('0000000000000003','2000000000000000');
-insert into NK_USER_ROLE values ('0000000000000004','2000000000000000');
-insert into NK_USER_ROLE values ('0000000000000005','2000000000000000');
+insert into NK_USER_ROLE values ('admin','user');
+insert into NK_USER_ROLE values ('admin1','user');
+insert into NK_USER_ROLE values ('admin2','user');
+insert into NK_USER_ROLE values ('user','user');
+insert into NK_USER_ROLE values ('user1','user');
+insert into NK_USER_ROLE values ('user2','user');

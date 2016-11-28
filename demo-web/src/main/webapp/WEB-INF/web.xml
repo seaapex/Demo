@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<display-name>demo-web</display-name>
-
 	<security-constraint>
 		<display-name>public</display-name>
 
@@ -13,6 +12,7 @@
 			<description>User Registration</description>
 			<url-pattern>/rest/user/*</url-pattern>
 			<http-method>PUT</http-method>
+			<http-method>GET</http-method>
 		</web-resource-collection>
 	</security-constraint>
 
@@ -37,6 +37,7 @@
 
 	<login-config>
 		<auth-method>BASIC</auth-method>
+		<realm-name>NotesRealm</realm-name>
 	</login-config>
 
 	<security-role>

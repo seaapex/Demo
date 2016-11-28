@@ -10,7 +10,7 @@ import ca.ljz.demo.entities.Role;
  * Session Bean implementation class RoleEJB
  */
 @Stateless
-public class RoleEJB extends BaseEJB<Role> {
+public class RoleEJB extends BaseEJB<String, Role> {
 
 	/**
 	 * 
@@ -22,16 +22,17 @@ public class RoleEJB extends BaseEJB<Role> {
 		return Role.class;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Role> search(Role entity) {
-		List<Role> groups = null;
+		List<Role> roles = null;
 
 		if (entity == null) {
-			groups = em.createNamedQuery(Role.QUERY_ALL, getEntityType()).getResultList();
+			roles = em.createNamedQuery(Role.QUERY_ALL).getResultList();
 		} else {
 		}
-		
-		return groups;
+
+		return roles;
 	}
 
 }

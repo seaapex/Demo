@@ -1,6 +1,7 @@
 package ca.ljz.demo.entities;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * The persistent class for the nk_role database table.
@@ -9,8 +10,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "nk_role")
 @NamedQueries({ @NamedQuery(name = Role.QUERY_ALL, query = "SELECT r FROM Role r"),
-		@NamedQuery(name = Role.QUERY_ROLE, query = "SELECT r FROM Role r WHERE r.role = :role") })
-public class Role extends Base {
+		@NamedQuery(name = Role.QUERY_ROLE, query = "SELECT r FROM Role r WHERE r.rolename = :rolename") })
+public class Role extends Base<String> {
 
 	/**
 	 * 
@@ -20,18 +21,25 @@ public class Role extends Base {
 	public static final String QUERY_ALL = "Role.findAll";
 	public static final String QUERY_ROLE = "Role.findByRole";
 
-	@Column(name = "NAME", nullable = false, length = 30)
-	private String role;
+	@Id
+	@Column(nullable = false, length = 30)
+	private String rolename;
 
 	public Role() {
 	}
 
-	public String getRole() {
-		return this.role;
+	@XmlTransient
+	@Override
+	public String getId() {
+		return getRolename();
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public String getRolename() {
+		return this.rolename;
+	}
+
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
 	}
 
 }

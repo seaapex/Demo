@@ -10,7 +10,7 @@ import ca.ljz.demo.entities.User;
  * Session Bean implementation class UserEJB
  */
 @Stateless
-public class UserEJB extends BaseEJB<User> {
+public class UserEJB extends BaseEJB<String, User> {
 
 	/**
 	 * 
@@ -22,12 +22,13 @@ public class UserEJB extends BaseEJB<User> {
 		return User.class;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> search(User entity) {
 		List<User> users = null;
 
 		if (entity == null) {
-			users = em.createNamedQuery(User.QUERY_ALL, getEntityType()).getResultList();
+			users = em.createNamedQuery(User.QUERY_ALL).getResultList();
 		} else {
 		}
 

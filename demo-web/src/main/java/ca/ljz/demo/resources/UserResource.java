@@ -2,12 +2,10 @@ package ca.ljz.demo.resources;
 
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,8 +20,10 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.ljz.demo.ejbs.UserEJB;
 import ca.ljz.demo.entities.User;
+import ca.ljz.demo.exceptions.InvalidUserException;
+import ca.ljz.demo.services.UserService;
+import ca.ljz.demo.xml.Message;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,20 +32,17 @@ import ca.ljz.demo.entities.User;
 @DeclareRoles({ "admin", "user" })
 public class UserResource {
 
-	Logger logger = LoggerFactory.getLogger(UserResource.class);
+	private static Logger logger = LoggerFactory.getLogger(UserResource.class);
 
 	@EJB
-	UserEJB userEJB;
-
-	@Resource
-	SessionContext sc;
+	UserService us;
 
 	@GET
 	@RolesAllowed("admin")
-	public Response findAll() {
+//	@PermitAll
+	public List<User> findAll() {
 		logger.info("findAll");
-		List<User> users = userEJB.search(null);
-		return Response.status(Status.OK).entity(users).build();
+		return us.findAllUsers();
 	}
 
 	@GET
@@ -53,16 +50,23 @@ public class UserResource {
 	@RolesAllowed({ "admin", "user" })
 	public Response findById(@PathParam("id") String id) {
 		logger.info("findById");
-		User user = userEJB.get(id);
+		User user = us.findUserById(id);
 		return Response.status(Status.OK).entity(user).build();
 	}
 
 	@PUT
 	@PermitAll
-	public Response createUser(User user) {
+	public Response registerUser(User user) {
 		logger.info("createUser");
-		String id = userEJB.add(user);
-		return Response.status(Status.OK).entity(id).build();
+		try {
+			String id = us.createUser(user);
+			return Response.status(Status.CREATED).entity(id).build();
+		} catch (InvalidUserException e) {
+			Message msgs = new Message();
+			msgs.setMessages(e.getMessages());
+
+			return Response.status(Status.NOT_ACCEPTABLE).entity(msgs).build();
+		}
 	}
 
 }
