@@ -10,7 +10,7 @@ use NotesDB;
 
 create table NK_USER(
   USERNAME varchar(30) not null unique,
-  PASSWORD varchar(255) not null,
+  PASSWORD char(44) not null,
   EMAIL varchar(50) not null,
   FIRSTNAME varchar(20),
   LASTNAME varchar(20),
@@ -68,7 +68,7 @@ create table NK_USER_ROLE(
 )engine=InnoDB default charset=UTF8;
 
 create table NK_NOTE(
-  NOTEID binary(16) not null unique,
+  NOTEID int not null unique AUTO_INCREMENT,
   CONTENT text not null,
   TRUSHED boolean not null,
   USERNAME varchar(30) not null,
@@ -79,20 +79,20 @@ create table NK_NOTE(
 
 create table NK_USER_NOTE(
   USERNAME varchar(30) not null,
-  NOTEID binary(16) not null,
+  NOTEID int not null,
   
   primary key (USERNAME, NOTEID),
   foreign key (USERNAME) references NK_USER(USERNAME),
   foreign key (NOTEID) references NK_NOTE(NOTEID)
 )engine=InnoDB default charset=UTF8;
 
--- sha256 hex value of "password": 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
-insert into NK_USER values ('admin','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
-insert into NK_USER values ('admin1','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
-insert into NK_USER values ('admin2','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
-insert into NK_USER values ('user','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
-insert into NK_USER values ('user1','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
-insert into NK_USER values ('user2','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+-- sha256 hex value of "password": XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=
+insert into NK_USER values ('admin','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('admin1','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('admin2','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('user','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('user1','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
+insert into NK_USER values ('user2','XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=','lijianzhao@lijianzhao.com','William','Li','5875816697','M');
 
 insert into NK_ROLE values ('admin');
 insert into NK_ROLE values ('user');
@@ -107,3 +107,19 @@ insert into NK_USER_ROLE values ('admin2','user');
 insert into NK_USER_ROLE values ('user','user');
 insert into NK_USER_ROLE values ('user1','user');
 insert into NK_USER_ROLE values ('user2','user');
+
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 1', false, 'admin');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 2', true, 'admin');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 3', true, 'admin');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 4', false, 'admin');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 5', false, 'admin1');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 6', false, 'admin1');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 7', false, 'admin1');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 8', false, 'admin2');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 9', false, 'admin2');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 10', false, 'admin2');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 11', false, 'user');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 12', false, 'user');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 13', false, 'user1');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 14', false, 'user1');
+insert into NK_NOTE (CONTENT,TRUSHED,USERNAME) values ('This is test content 15', false, 'user2');

@@ -1,6 +1,8 @@
 package ca.ljz.demo.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -30,9 +32,11 @@ public class User extends Base<String> {
 
 	@Id
 	@Column(nullable = false, length = 30)
+	@NotNull
+	@Size(max = 30, min = 3, message = "username must be 3 to 30 characters long")
 	private String username;
 
-	@Column(nullable = false, length = 44)
+	@Column(nullable = false)
 	private String password;
 
 	@Column(nullable = false, length = 50)
@@ -51,11 +55,11 @@ public class User extends Base<String> {
 	private char gender;
 
 	// bi-directional many-to-one association to Note
-	@OneToMany(mappedBy = "owner")
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private List<Note> ownedNotes;
 
 	// bi-directional many-to-many association to Note
-	@ManyToMany(mappedBy = "collaborators")
+	@ManyToMany(mappedBy = "collaborators", cascade = CascadeType.ALL)
 	private List<Note> collaboratedNotes;
 
 	// uni-directional many-to-many association to Role
@@ -114,7 +118,6 @@ public class User extends Base<String> {
 		this.username = username;
 	}
 
-	@XmlTransient
 	public String getPassword() {
 		return this.password;
 	}

@@ -1,18 +1,21 @@
 package ca.ljz.demo.ejbs;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.annotation.Resource;
-import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 import ca.ljz.demo.entities.Base;
-import ca.ljz.demo.utils.UUIDUtils;
+import ca.ljz.demo.exceptions.ValidationException;
 
 /**
  * 
@@ -31,45 +34,57 @@ public abstract class BaseEJB<I, T extends Base<I>> implements Serializable {
 	 */
 	private static final long serialVersionUID = 1879756223965095751L;
 
-	Logger logger = LoggerFactory.getLogger(BaseEJB.class);
+	private static Logger logger = Logger.getLogger(BaseEJB.class.getName());
 
 	@PersistenceContext
 	EntityManager em;
 
-	@Resource
-	SessionContext ctx;
+	@Inject
+	Validator validator;
 
-	public T get(String id) {
-		logger.info("get");
-		T t = em.find(getEntityType(), UUIDUtils.uuidToByteArray(id));
+	public T get(I id) {
+		T t = em.find(getEntityType(), id);
 		return t;
 	}
 
 	public T update(T entity) {
-		logger.info("update");
+		validate(entity);
 
 		return em.merge(entity);
 	}
 
 	public I add(T entity) {
-		logger.info("add");
-
-		I id = entity.getId();
+		validate(entity);
 
 		em.persist(entity);
 
-		return id;
+		return entity.getId();
 	}
 
-	public T delete(String id) {
-		logger.info("delete");
+	public T delete(I id) {
 		T entity = get(id);
 		em.remove(entity);
 		return entity;
 	}
 
-	public abstract List<T> search(T entity);
+	public abstract List<T> findAll();
 
 	protected abstract Class<T> getEntityType();
+
+	private void validate(T entity) {
+		Set<ConstraintViolation<T>> violations = validator.validate(entity);
+		if (violations.size() > 0) {
+			Iterator<ConstraintViolation<T>> violationIterator = violations.iterator();
+			String[] violationMsgs = new String[violations.size()];
+			for (int i = 0; violationIterator.hasNext(); i++) {
+				violationMsgs[i] = violationIterator.next().getMessage();
+			}
+
+			ValidationException ve = new ValidationException(violationMsgs);
+			logger.log(Level.INFO, "ValidationException Message:" + ve.getMessages());
+			logger.log(Level.INFO, "ValidationException ID:" + ve);
+			throw ve;
+		}
+	}
 
 }

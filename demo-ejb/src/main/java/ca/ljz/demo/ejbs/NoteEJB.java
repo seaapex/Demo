@@ -13,7 +13,7 @@ import ca.ljz.demo.entities.User;
  * Session Bean implementation class NoteEJB
  */
 @Stateless
-public class NoteEJB extends BaseEJB<String, Note> {
+public class NoteEJB extends BaseEJB<Integer, Note> {
 
 	/**
 	 * 
@@ -29,13 +29,12 @@ public class NoteEJB extends BaseEJB<String, Note> {
 	}
 
 	@Override
-	public List<Note> search(Note entity) {
-		// TODO Auto-generated method stub
+	public List<Note> findAll() {
 		return null;
 	}
 
 	@Override
-	public String add(Note note) {
+	public Integer add(Note note) {
 
 		note.setOwner(userEJB.get(note.getOwner().getId()));
 		note.getOwner().getOwnedNotes().add(note);
@@ -50,7 +49,7 @@ public class NoteEJB extends BaseEJB<String, Note> {
 	}
 
 	@Override
-	public Note delete(String id) {
+	public Note delete(Integer id) {
 		// TODO Auto-generated method stub
 		return super.delete(id);
 	}

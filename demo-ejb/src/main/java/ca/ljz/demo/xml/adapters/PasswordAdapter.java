@@ -13,8 +13,9 @@ public class PasswordAdapter extends XmlAdapter<String, String> {
 
 	@Override
 	public String unmarshal(String password) throws Exception {
-		String encryptedPassword = EncryptionUtils.encrypt(password,"SHA-256");
-		return encryptedPassword;
+		if (password == null || password.trim().isEmpty())
+			return null;
+		return EncryptionUtils.encrypt(password.trim(), "SHA-256");
 	}
 
 }

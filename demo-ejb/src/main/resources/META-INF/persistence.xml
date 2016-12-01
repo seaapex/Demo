@@ -20,8 +20,5 @@
 	<class>ca.ljz.demo.entities.Note</class>
 	<class>ca.ljz.demo.entities.Role</class>
 	<class>ca.ljz.demo.entities.User</class>
-		<properties>
-			<property name="hibernate.enable_lazy_load_no_trans" value="true"/>
-		</properties>
 	</persistence-unit>
 </persistence>

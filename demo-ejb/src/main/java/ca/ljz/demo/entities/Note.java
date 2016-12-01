@@ -4,10 +4,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import ca.ljz.demo.utils.UUIDUtils;
-
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The persistent class for the nk_note database table.
@@ -17,7 +14,7 @@ import java.util.UUID;
 @Table(name = "nk_note")
 @NamedQuery(name = "Note.findAll", query = "SELECT n FROM Note n")
 @XmlRootElement
-public class Note extends Base<String> {
+public class Note extends Base<Integer> {
 
 	/**
 	 * 
@@ -25,8 +22,9 @@ public class Note extends Base<String> {
 	private static final long serialVersionUID = -4890835542854229507L;
 
 	@Id
-	@Column(unique = true, nullable = false, length = 16)
-	private byte[] noteid;
+	@Column(unique = true, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int noteid;
 
 	@Lob
 	@Column(nullable = false)
@@ -51,23 +49,12 @@ public class Note extends Base<String> {
 	}
 
 	@XmlTransient
-	public byte[] getNoteid() {
-		if (this.noteid == null || this.noteid.length != 16) {
-
-			UUID uuid = UUID.randomUUID();
-
-			this.noteid = UUIDUtils.uuidToByteArray(uuid);
-		}
-
+	public int getNoteid() {
 		return this.noteid;
 	}
 
-	public String getId() {
-		return UUIDUtils.byteArrayToUUIDString(getNoteid());
-	}
-
-	public void setId(String id) {
-		this.noteid = UUIDUtils.uuidToByteArray(id);
+	public void setNoteid(int noteid) {
+		this.noteid = noteid;
 	}
 
 	public String getContent() {
@@ -102,6 +89,11 @@ public class Note extends Base<String> {
 
 	public void setCollaborators(List<User> collaborators) {
 		this.collaborators = collaborators;
+	}
+
+	@Override
+	public Integer getId() {
+		return this.noteid;
 	}
 
 }

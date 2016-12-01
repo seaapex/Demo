@@ -1,77 +1,106 @@
 package ca.ljz.demo.services;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
+import ca.ljz.demo.entities.Role;
 import ca.ljz.demo.entities.User;
-import ca.ljz.demo.exceptions.InvalidUserException;
+import ca.ljz.demo.exceptions.ValidationException;
+import ca.ljz.demo.ejbs.RoleEJB;
 import ca.ljz.demo.ejbs.UserEJB;
 
 @Stateless
 public class UserService {
+
 	@EJB
 	UserEJB userEJB;
 
-	@Inject
-	Validator validator;
+	@EJB
+	RoleEJB roleEJB;
 
 	public List<User> findAllUsers() {
-		return userEJB.search(null);
-	}
-
-	public User findUserById(String id) {
-		return userEJB.get(id);
+		return userEJB.findAll();
 	}
 
 	public User findUserByUsername(String username) {
-		User user = new User();
-		user.setUsername(username);
-		List<User> containUsernameUsers = userEJB.search(user);
-
-		for (User u : containUsernameUsers) {
-			if (u.getUsername().equals(username))
-				return u;
-		}
-
-		return null;
+		return userEJB.get(username);
 	}
 
-	public String createUser(User user) throws InvalidUserException {
-		String[] violationMsgs = validateUser(user);
-		if (violationMsgs != null)
-			throw new InvalidUserException(violationMsgs);
+	public List<User> searchUserByUsernameOrEmail(String input) {
+		User user = new User();
+		user.setUsername(input);
+		List<User> containUsernameUsers = userEJB.findAll();
+
+		List<User> users = new ArrayList<>();
+		for (User u : containUsernameUsers) {
+			if (u.getEmail().contains(input) || u.getUsername().contains(input)) {
+				users.add(u);
+				if (users.size() > 5)
+					break;
+			}
+		}
+
+		return users;
+	}
+
+	public String createUser(String username, String password, String email, String firstname, String lastname,
+			String phonenumber, char gender) throws ValidationException {
+
+		User user = new User();
+		user.setUsername(username.trim());
+
+		user.setPassword(password);
+		user.setFirstname(firstname.trim());
+		user.setLastname(lastname.trim());
+		user.setEmail(email.trim().toLowerCase());
+		user.setPhonenumber(phonenumber.trim());
+		user.setGender(gender);
+
+		List<Role> roles = new ArrayList<>(1);
+		roles.add(roleEJB.get("user"));
+		user.setRoles(roles);
+
 		return userEJB.add(user);
 	}
 
-	public void editUser(User user) throws InvalidUserException {
-		String[] violationMsgs = validateUser(user);
-		if (violationMsgs != null)
-			throw new InvalidUserException(violationMsgs);
+	public void editUser(String username, String password, String email, String firstname, String lastname,
+			String phonenumber, char gender) throws ValidationException {
+
+		User user = userEJB.get(username);
+
+		user.setPassword(password == null || password.trim().isEmpty() ? user.getPassword() : password);
+		user.setFirstname(firstname == null || firstname.trim().isEmpty() ? user.getFirstname() : firstname.trim());
+		user.setLastname(lastname == null || lastname.trim().isEmpty() ? user.getLastname() : lastname.trim());
+		user.setEmail(email == null || email.trim().isEmpty() ? user.getEmail() : email.trim().toLowerCase());
+		user.setPhonenumber(
+				phonenumber == null || phonenumber.trim().isEmpty() ? user.getPhonenumber() : phonenumber.trim());
+		user.setGender(gender);
+
 		userEJB.update(user);
 	}
 
-	public void deleteUserById(String id) {
-		userEJB.delete(id);
+	public void deleteUserByUsername(String username) {
+		User user = userEJB.get(username);
+
+		user.getRoles().clear();
+		userEJB.update(user);
+
+		userEJB.delete(username);
 	}
 
-	private String[] validateUser(User user) {
-		Set<ConstraintViolation<User>> violations = validator.validate(user);
+	public void promoteUser(String username) {
+		User user = userEJB.get(username);
+		if (!user.getRoles().contains(roleEJB.get("admin")))
+			user.getRoles().add(roleEJB.get("admin"));
+		userEJB.update(user);
+	}
 
-		if (violations.size() > 0) {
-			Iterator<ConstraintViolation<User>> violationIterator = violations.iterator();
-			String[] violationMsgs = new String[violations.size()];
-			for (int i = 0; violationIterator.hasNext(); i++) {
-				violationMsgs[i] = violationIterator.next().getMessage();
-			}
-			return violationMsgs;
-		}
-		return null;
+	public void demoteUser(String username) {
+		User user = userEJB.get(username);
+		user.getRoles().remove(roleEJB.get("admin"));
+		userEJB.update(user);
 	}
 }

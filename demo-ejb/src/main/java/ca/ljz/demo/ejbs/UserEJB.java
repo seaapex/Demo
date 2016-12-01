@@ -24,15 +24,8 @@ public class UserEJB extends BaseEJB<String, User> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<User> search(User entity) {
-		List<User> users = null;
-
-		if (entity == null) {
-			users = em.createNamedQuery(User.QUERY_ALL).getResultList();
-		} else {
-		}
-
-		return users;
+	public List<User> findAll() {
+		return em.createNamedQuery(User.QUERY_ALL).getResultList();
 	}
 
 }

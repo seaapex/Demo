@@ -24,15 +24,8 @@ public class RoleEJB extends BaseEJB<String, Role> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Role> search(Role entity) {
-		List<Role> roles = null;
-
-		if (entity == null) {
-			roles = em.createNamedQuery(Role.QUERY_ALL).getResultList();
-		} else {
-		}
-
-		return roles;
+	public List<Role> findAll() {
+		return em.createNamedQuery(Role.QUERY_ALL).getResultList();
 	}
 
 }
