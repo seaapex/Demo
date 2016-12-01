@@ -2,6 +2,8 @@ package ca.ljz.demo.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,6 +16,9 @@ import ca.ljz.demo.ejbs.UserEJB;
 
 @Stateless
 public class NoteService {
+
+	private static Logger logger = Logger.getLogger(NoteService.class.getName());
+
 	@EJB
 	UserEJB userEJB;
 
@@ -21,6 +26,9 @@ public class NoteService {
 	NoteEJB noteEJB;
 
 	public List<Note> findAllNotesByUsername(String username) {
+
+		logger.log(Level.INFO, "findAllNotesByUsername");
+
 		User user = userEJB.get(username);
 		List<Note> owned = user.getOwnedNotes();
 		List<Note> collaborated = user.getCollaboratedNotes();
@@ -34,6 +42,8 @@ public class NoteService {
 		for (Note note : collaborated)
 			if (!note.getIsTrushed())
 				all.add(note);
+
+		logger.log(Level.INFO, "Note number found: " + all.size());
 
 		return all;
 	}
@@ -73,14 +83,28 @@ public class NoteService {
 	}
 
 	public int createNote(String username) throws ValidationException {
+
+		logger.log(Level.INFO, "createNote");
+
 		User owner = userEJB.get(username);
+
 		Note note = new Note();
 		note.setOwner(owner);
-		return noteEJB.add(note);
+		note.setContent("");
+		note.setIsTrushed(false);
+		note.setCollaborators(new ArrayList<>());
+
+		int id = noteEJB.add(note);
+		return id;
 	}
 
 	public boolean editOwnedNote(String ownerUsername, int noteid, String noteContent) {
+
+		logger.log(Level.INFO, "editOwnedNote");
+
 		Note note = noteEJB.get(noteid);
+
+		logger.log(Level.INFO, "owner: " + ownerUsername + " - noteid: " + noteid + " - content: " + noteContent);
 
 		if (note.getOwner().getUsername().equals(ownerUsername)) {
 			note.setContent(noteContent);

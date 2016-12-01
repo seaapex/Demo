@@ -54,9 +54,14 @@ public abstract class BaseEJB<I, T extends Base<I>> implements Serializable {
 	}
 
 	public I add(T entity) {
+
+		logger.log(Level.INFO, "add");
 		validate(entity);
 
 		em.persist(entity);
+		em.flush();
+
+		logger.log(Level.INFO, "enity id: " + entity.getId());
 
 		return entity.getId();
 	}

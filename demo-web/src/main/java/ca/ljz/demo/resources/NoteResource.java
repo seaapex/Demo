@@ -93,6 +93,9 @@ public class NoteResource {
 		logger.log(Level.INFO, "createNote");
 		String username = ac.getCallerPrincipal();
 		int id = ns.createNote(username);
+
+		logger.log(Level.INFO, "created Note id: " + id);
+
 		Note note = ns.findNoteById(username, id);
 
 		return Response.status(Status.CREATED).entity(note).build();

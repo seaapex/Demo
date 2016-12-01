@@ -5,6 +5,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The persistent class for the nk_note database table.
@@ -20,6 +22,8 @@ public class Note extends Base<Integer> {
 	 * 
 	 */
 	private static final long serialVersionUID = -4890835542854229507L;
+
+	private static Logger logger = Logger.getLogger(Note.class.getName());
 
 	@Id
 	@Column(unique = true, nullable = false)
@@ -48,7 +52,6 @@ public class Note extends Base<Integer> {
 	public Note() {
 	}
 
-	@XmlTransient
 	public int getNoteid() {
 		return this.noteid;
 	}
@@ -92,7 +95,11 @@ public class Note extends Base<Integer> {
 	}
 
 	@Override
+	@XmlTransient
 	public Integer getId() {
+		logger.log(Level.INFO, "getId");
+
+		logger.log(Level.INFO, "getId: " + this.noteid);
 		return this.noteid;
 	}
 
