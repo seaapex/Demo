@@ -1,7 +1,7 @@
 # demo
 A RESTful demo including a POM, an EAR, an EJB and a WAR projects.
 
-The noteKeepr branch contains noteKeepr.zip which is a finished project using the stucture of this demo project. To view run the code, unzip noteKeepr.zip and import as maven projects by following these steps:
+The **noteKeepr branch** contains **noteKeepr.zip** which is a finished project using the stucture of this demo project. To view or run the code, unzip noteKeepr.zip and import as maven projects by following these steps:
 
  1. Import the POM project
  2. Import the EJB project
